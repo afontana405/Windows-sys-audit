@@ -1,5 +1,7 @@
 $output_dir = "$HOME\Documents\software_inventory"
-mkdir "$output_dir"
+if (-not (Test-Path $output_dir)) {
+    New-Item -Path $output_dir -ItemType Directory | Out-Null
+}
 
 # Computer
 Write-Output "[+] Collecting Computer Info..."
