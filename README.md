@@ -6,6 +6,8 @@ This PowerShell script collects detailed hardware, software, and network informa
 
 ## Usage
 
+Upon cloning the Repo to a Windows machine
+
 1. **Navigate into the project directory**:  
    `cd Linux-sys-audit`
 
