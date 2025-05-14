@@ -23,7 +23,7 @@ Upon cloning the Repo to a Windows machine
 3. **View the results**:  
    The output of the system audit will be saved in within `Documents/software_inventory`.
 
-## 📁 Features
+## Features
 
 - **System Overview**: Collects general computer info such as OS version, architecture, and build.
 - **Hardware Inventory**:
@@ -37,7 +37,7 @@ Upon cloning the Repo to a Windows machine
 - **Installed Software**: Gathers installed program data from the registry (including 32-bit apps).
 - **Output Management**: Automatically creates an output directory in `Documents\software_inventory` if it doesn't exist.
 
-## 📄 Output Files
+## Output Files
 - `ComputerInfo.txt`
 - `CPU.txt`
 - `Memory.txt`
