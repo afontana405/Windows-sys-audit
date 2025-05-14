@@ -1,4 +1,4 @@
-$output_dir = "$HOME\software_inventory"
+$output_dir = "$HOME\Documents\software_inventory"
 mkdir "$output_dir"
 
 # Computer Info
