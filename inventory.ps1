@@ -2,5 +2,5 @@ output_dir = "$HOME\software_inventory"
 mkdir "$output_dir"
 
 # Computer Info
-echo "[+] Collecting Computer Info..."
+Write-Output "[+] Collecting Computer Info..."
 Get-ComputerInfo | Out-File "$output_dir\ComputerInfo.txt"
