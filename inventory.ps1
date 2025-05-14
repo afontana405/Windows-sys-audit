@@ -29,4 +29,16 @@ Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uni
     Select-Object DisplayName, DisplayVersion, Publisher, InstallDate |
     Out-File "$output_dir\InstalledPrograms.txt"
 
+# 7. IP configuration
+Write-Output "[+] Collecting IP Configuration..."
+Get-NetIPConfiguration | Out-File "$output_dir\IPConfiguration.txt"
+
+# 8. Network connections
+Write-Output "[+] Collecting Active TCP/UDP Connections..."
+netstat -ano | Out-File "$output_dir\ActiveConnections.txt"
+
+# 9. Shared folders
+Write-Output "[+] Collecting Local Shared Folders..."
+Get-SmbShare | Out-File "$output_dir\SharedFolders.txt"
+
 Write-Output "Inventory complete. Output saved to: $output_dir"
