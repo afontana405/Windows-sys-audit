@@ -44,19 +44,19 @@ Write-Output "[+] Collecting Security Info..."
 Get-CimInstance -Namespace "root/SecurityCenter2" -ClassName AntivirusProduct | Out-File "$software_dir\SecuritySoftware.txt"
 Get-NetFirewallProfile | Out-File "$software_dir\SecuritySoftware.txt" -Append
 
-# 6. Network
+# 8. Network
 Write-Output "[+] Collecting Network Info..."
 Get-CimInstance -ClassName Win32_NetworkAdapterConfiguration | Out-File "$network_dir\Network.txt"
 
-# 7. IP configuration
+# 9. IP configuration
 Write-Output "[+] Collecting IP Configuration..."
 Get-NetIPConfiguration | Out-File "$network_dir\IPConfiguration.txt"
 
-# 8. Network connections
+# 10. Network connections
 Write-Output "[+] Collecting Active TCP/UDP Connections..."
 netstat -ano | Out-File "$network_dir\ActiveConnections.txt"
 
-# 9. Shared folders
+# 11. Shared folders
 Write-Output "[+] Collecting Local Shared Folders..."
 Get-SmbShare | Out-File "$network_dir\SharedFolders.txt"
 
