@@ -21,7 +21,7 @@ Upon cloning the Repo to a Windows machine within powershell
    `powershell -ExecutionPolicy Bypass -File ./inventory.ps1`
 
 3. **View the results**:  
-   The output of the system audit will be saved in within `Documents/software_inventory`.
+   The output of the system audit will be saved within `Documents/software_inventory`.
 
 ## Features
 
