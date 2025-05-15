@@ -15,7 +15,7 @@ This PowerShell script collects detailed hardware, software, and network informa
 3. **View the results**:  
    The output of the system audit will be saved in within `Documents/software_inventory`.
 
-## 📁 Features
+## Features
 
 - **System Overview**: Collects general computer info such as OS version, architecture, and build.
 - **Hardware Inventory**:
@@ -29,17 +29,22 @@ This PowerShell script collects detailed hardware, software, and network informa
 - **Installed Software**: Gathers installed program data from the registry (including 32-bit apps).
 - **Output Management**: Automatically creates an output directory in `Documents\software_inventory` if it doesn't exist.
 
-## 📄 Output Files
-- `ComputerInfo.txt`
-- `CPU.txt`
-- `Memory.txt`
-- `Disk.txt`
-- `Network.txt`
-- `InstalledPrograms.txt`
-- `IPConfiguration.txt`
-- `ActiveConnections.txt`
-- `SharedFolders.txt`
-
+## Output File Structure
+```
+software_inventory/
+├── hardware/
+│   ├── ComputerInfo.txt
+│   ├── CPU.txt
+│   ├── Memory.txt
+│   └── Disk.txt
+├── software/
+│   └── InstalledPrograms.txt
+└── network/
+    ├── Network.txt
+    ├── IPConfiguration.txt
+    ├── ActiveConnections.txt
+    └── SharedFolders.txt
+```
 ## License 
 
 Please refer to the LICENSE in the repo.
