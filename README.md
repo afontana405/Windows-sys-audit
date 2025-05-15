@@ -37,17 +37,22 @@ Upon cloning the Repo to a Windows machine within powershell
 - **Installed Software**: Gathers installed program data from the registry (including 32-bit apps).
 - **Output Management**: Automatically creates an output directory in `Documents\software_inventory` if it doesn't exist.
 
-## Output Files
-- `ComputerInfo.txt`
-- `CPU.txt`
-- `Memory.txt`
-- `Disk.txt`
-- `Network.txt`
-- `InstalledPrograms.txt`
-- `IPConfiguration.txt`
-- `ActiveConnections.txt`
-- `SharedFolders.txt`
-
+## Output File Structure
+```
+software_inventory/
+├── hardware/
+│   ├── ComputerInfo.txt
+│   ├── CPU.txt
+│   ├── Memory.txt
+│   └── Disk.txt
+├── software/
+│   └── InstalledPrograms.txt
+└── network/
+    ├── Network.txt
+    ├── IPConfiguration.txt
+    ├── ActiveConnections.txt
+    └── SharedFolders.txt
+```
 ## License 
 
 Please refer to the LICENSE in the repo.

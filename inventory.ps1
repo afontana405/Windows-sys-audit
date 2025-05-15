@@ -21,11 +21,11 @@ Write-Output "[+] Collecting CPU Info..."
 Get-CimInstance -ClassName Win32_Processor | Out-File "$hardware_dir\CPU.txt"
 
 # 3. Memory
-Write-Output "[+] Collection Memory Info..."
+Write-Output "[+] Collecting Memory Info..."
 Get-CimInstance -ClassName Win32_PhysicalMemory | Out-File "$hardware_dir\Memory.txt"
 
 # 4. Disk
-Write-Output "[+] Collection Disk Info..."
+Write-Output "[+] Collecting Disk Info..."
 Get-CimInstance -ClassName Win32_DiskDrive | Out-File "$hardware_dir\Disk.txt"
 
 # 5. Installed programs (registry-based method, more reliable)
