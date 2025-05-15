@@ -6,14 +6,22 @@ This PowerShell script collects detailed hardware, software, and network informa
 
 ## Usage
 
+Upon cloning the Repo to a Windows machine within powershell
+
 1. **Navigate into the project directory**:  
    `cd Linux-sys-audit`
 
-2. **Run the script**:  
-   `./inventory.sh`
+2. **Run the script** using one of the following methods:
+
+   ### Option A – Run Normally (if your system allows scripts):  
+   `./inventory.ps1`
+
+   ### Option B – If You See a "Running scripts is disabled" Error:  
+   Bypass the execution policy for this session:  
+   `powershell -ExecutionPolicy Bypass -File ./inventory.ps1`
 
 3. **View the results**:  
-   The output of the system audit will be saved in within `Documents/software_inventory`.
+   The output of the system audit will be saved within `Documents/software_inventory`.
 
 ## Features
 
