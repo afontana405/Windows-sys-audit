@@ -34,6 +34,16 @@ Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uni
     Select-Object DisplayName, DisplayVersion, Publisher, InstallDate |
     Out-File "$software_dir\InstalledPrograms.txt"
 
+# 6. Startup programs for current user and system wide
+Write-Output "[+] Collecting Startup Program Info..."
+Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" | Out-File "$software_dir\StartupPrograms.txt"
+Get-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" | Out-File "$software_dir\StartupPrograms.txt" -Append
+
+# 7. Antivirus n Firewall
+Write-Output "[+] Collecting Security Info..."
+Get-CimInstance -Namespace "root/SecurityCenter2" -ClassName AntivirusProduct | Out-File "$software_dir\SecuritySoftware.txt"
+Get-NetFirewallProfile | Out-File "$software_dir\SecuritySoftware.txt" -Append
+
 # 6. Network
 Write-Output "[+] Collecting Network Info..."
 Get-CimInstance -ClassName Win32_NetworkAdapterConfiguration | Out-File "$network_dir\Network.txt"
