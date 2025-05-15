@@ -38,7 +38,9 @@ software_inventory/
 │   ├── Memory.txt
 │   └── Disk.txt
 ├── software/
-│   └── InstalledPrograms.txt
+│   ├── InstalledPrograms.txt
+│   ├── StartupPrograms.txt
+│   └── SecuritySoftware.txt
 └── network/
     ├── Network.txt
     ├── IPConfiguration.txt
