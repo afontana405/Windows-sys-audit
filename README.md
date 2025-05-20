@@ -26,26 +26,27 @@ This PowerShell script collects detailed hardware, software, and network informa
   - Adapter configurations (IP, DNS, Gateway)
   - Active TCP/UDP connections (`netstat`)
   - Shared folders over SMB
-- **Installed Software**: Gathers installed program data from the registry (including 32-bit apps).
+- **Installed Software**: Collects data on installed applications from the registry (including 32-bit programs), identifies programs configured to run at system startup or user login, and reports on antivirus and firewall status.
 - **Output Management**: Automatically creates an output directory in `Documents\software_inventory` if it doesn't exist.
 
 ## Output File Structure
 ```
-software_inventory/
-├── hardware/
-│   ├── ComputerInfo.txt
-│   ├── CPU.txt
-│   ├── Memory.txt
-│   └── Disk.txt
-├── software/
-│   ├── InstalledPrograms.txt
-│   ├── StartupPrograms.txt
-│   └── SecuritySoftware.txt
-└── network/
-    ├── Network.txt
-    ├── IPConfiguration.txt
-    ├── ActiveConnections.txt
-    └── SharedFolders.txt
+Documents/
+└─ software_inventory/
+   ├── hardware/
+   │   ├── ComputerInfo.txt
+   │   ├── CPU.txt
+   │   ├── Memory.txt
+   │   └── Disk.txt
+   ├── software/
+   │   ├── InstalledPrograms.txt
+   │   ├── StartupPrograms.txt
+   │   └── SecuritySoftware.txt
+   └── network/
+       ├── Network.txt
+       ├── IPConfiguration.txt
+       ├── ActiveConnections.txt
+       └── SharedFolders.txt
 ```
 ## License 
 
