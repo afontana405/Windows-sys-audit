@@ -9,7 +9,7 @@ This PowerShell script collects detailed hardware, software, and network informa
 Upon cloning the Repo to a Windows machine within powershell
 
 1. **Navigate into the project directory**:  
-   `cd Linux-sys-audit`
+   `cd Windows-sys-audit`
 
 2. **Run the script** using one of the following methods:
 
