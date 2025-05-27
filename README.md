@@ -14,14 +14,14 @@ Upon cloning the Repo to a Windows machine within powershell
 2. **Run the script** using one of the following methods:
 
    ### Option A – Run Normally (if your system allows scripts):  
-   `./inventory.ps1`
+   `.\inventory.ps1`
 
    ### Option B – If You See a "Running scripts is disabled" Error:  
    Bypass the execution policy for this session:  
-   `powershell -ExecutionPolicy Bypass -File ./inventory.ps1`
+   `powershell -ExecutionPolicy Bypass -File .\inventory.ps1`
 
 3. **View the results**:  
-   The output of the system audit will be saved within `Documents/software_inventory`.
+   The output of the system audit will be saved within `Documents\software_inventory`.
 
 ## Features
 
@@ -39,18 +39,18 @@ Upon cloning the Repo to a Windows machine within powershell
 
 ## Output File Structure
 ```
-Documents/
-└─ software_inventory/
-   ├── hardware/
+Documents\
+└─ software_inventory\
+   ├── hardware\
    │   ├── ComputerInfo.txt
    │   ├── CPU.txt
    │   ├── Memory.txt
    │   └── Disk.txt
-   ├── software/
+   ├── software\
    │   ├── InstalledPrograms.txt
    │   ├── StartupPrograms.txt
    │   └── SecuritySoftware.txt
-   └── network/
+   └── network\
        ├── Network.txt
        ├── IPConfiguration.txt
        ├── ActiveConnections.txt
