@@ -7,13 +7,13 @@ This PowerShell script collects detailed hardware, software, and network informa
 ## Usage
 
 1. **Navigate into the project directory**:  
-   `cd Linux-sys-audit`
+   `cd Windows-sys-audit`
 
 2. **Run the script**:  
    `./inventory.sh`
 
 3. **View the results**:  
-   The output of the system audit will be saved in within `Documents/software_inventory`.
+   The output of the system audit will be saved in within `C:/software_inventory`.
 
 ## Features
 
@@ -27,12 +27,12 @@ This PowerShell script collects detailed hardware, software, and network informa
   - Active TCP/UDP connections (`netstat`)
   - Shared folders over SMB
 - **Installed Software**: Collects data on installed applications from the registry (including 32-bit programs), identifies programs configured to run at system startup or user login, and reports on antivirus and firewall status.
-- **Output Management**: Automatically creates an output directory in `Documents\software_inventory` if it doesn't exist.
+- **Output Management**: Automatically creates an output directory in `C:\system_inventory` if it doesn't exist.
 
 ## Output File Structure
 ```
-Documents/
-└─ software_inventory/
+C:/
+└─ system_inventory/
    ├── hardware/
    │   ├── ComputerInfo.txt
    │   ├── CPU.txt
