@@ -27,7 +27,7 @@ This PowerShell script collects detailed hardware, software, and network informa
   - Active TCP/UDP connections (`netstat`)
   - Shared folders over SMB
 - **Installed Software**: Collects data on installed applications from the registry (including 32-bit programs), identifies programs configured to run at system startup or user login, and reports on antivirus and firewall status.
-- **Output Management**: Automatically creates an output directory in `C:\system_inventory` if it doesn't exist.
+- **Output Management**: Automatically creates an output directory in `C:/system_inventory` if it doesn't exist.
 
 ## Output File Structure
 ```
