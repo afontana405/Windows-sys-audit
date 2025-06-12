@@ -6,22 +6,14 @@ This PowerShell script collects detailed hardware, software, and network informa
 
 ## Usage
 
-Upon cloning the Repo to a Windows machine within powershell
-
 1. **Navigate into the project directory**:  
    `cd Windows-sys-audit`
 
-2. **Run the script** using one of the following methods:
-
-   ### Option A – Run Normally (if your system allows scripts):  
-   `.\inventory.ps1`
-
-   ### Option B – If You See a "Running scripts is disabled" Error:  
-   Bypass the execution policy for this session:  
-   `powershell -ExecutionPolicy Bypass -File .\inventory.ps1`
+2. **Run the script**:  
+   `./inventory.sh`
 
 3. **View the results**:  
-   The output of the system audit will be saved within `Documents\software_inventory`.
+   The output of the system audit will be saved in within `C:/software_inventory`.
 
 ## Features
 
@@ -35,22 +27,22 @@ Upon cloning the Repo to a Windows machine within powershell
   - Active TCP/UDP connections (`netstat`)
   - Shared folders over SMB
 - **Installed Software**: Collects data on installed applications from the registry (including 32-bit programs), identifies programs configured to run at system startup or user login, and reports on antivirus and firewall status.
-- **Output Management**: Automatically creates an output directory in `Documents\software_inventory` if it doesn't exist.
+- **Output Management**: Automatically creates an output directory in `C:\system_inventory` if it doesn't exist.
 
 ## Output File Structure
 ```
-Documents\
-└─ software_inventory\
-   ├── hardware\
+C:/
+└─ system_inventory/
+   ├── hardware/
    │   ├── ComputerInfo.txt
    │   ├── CPU.txt
    │   ├── Memory.txt
    │   └── Disk.txt
-   ├── software\
+   ├── software/
    │   ├── InstalledPrograms.txt
    │   ├── StartupPrograms.txt
    │   └── SecuritySoftware.txt
-   └── network\
+   └── network/
        ├── Network.txt
        ├── IPConfiguration.txt
        ├── ActiveConnections.txt

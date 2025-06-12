@@ -1,5 +1,5 @@
 # Define root and category directories
-$output_root = "$HOME\Documents\software_inventory"
+$output_root = "C:\system_inventory"
 $hardware_dir = Join-Path $output_root "hardware"
 $software_dir = Join-Path $output_root "software"
 $network_dir  = Join-Path $output_root "network"
@@ -29,10 +29,9 @@ Write-Output "[+] Collecting Disk Info..."
 Get-CimInstance -ClassName Win32_DiskDrive | Out-File "$hardware_dir\Disk.txt"
 
 # 5. Installed programs (registry-based method, more reliable)
-Write-Output "[+] Collecting Installed Programs..."
-Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* |
-    Select-Object DisplayName, DisplayVersion, Publisher, InstallDate |
-    Out-File "$software_dir\InstalledPrograms.txt"
+Get-ItemProperty "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*", 
+                 "HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*" |
+    Select-Object DisplayName, DisplayVersion | Format-Table -AutoSize | Out-File "$software_dir\InstalledPrograms.txt"
 
 # 6. Startup programs for current user and system wide
 Write-Output "[+] Collecting Startup Program Info..."
@@ -42,7 +41,9 @@ Get-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" | O
 # 7. Antivirus n Firewall
 Write-Output "[+] Collecting Security Info..."
 Get-CimInstance -Namespace "root/SecurityCenter2" -ClassName AntivirusProduct | Out-File "$software_dir\SecuritySoftware.txt"
-Get-NetFirewallProfile | Out-File "$software_dir\SecuritySoftware.txt" -Append
+Get-NetFirewallRule | 
+    Select-Object DisplayName, Direction, Action, Enabled, Profile |
+    Sort-Object DisplayName | Out-File "$software_dir\SecuritySoftware.txt" -Append
 
 # 8. Network
 Write-Output "[+] Collecting Network Info..."
