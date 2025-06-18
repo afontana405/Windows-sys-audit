@@ -1,64 +1,94 @@
-# Define root and category directories
-$output_root = "C:\system_inventory"
-$hardware_dir = Join-Path $output_root "hardware"
-$software_dir = Join-Path $output_root "software"
-$network_dir  = Join-Path $output_root "network"
+# inventory.ps1
+# Audit Script for Windows Server 2022
+# Generates report on Installed Programs, Running Services, Open Ports, and Firewall Rules
 
-# Create directories if they don't exist
-$dirs = @($output_root, $hardware_dir, $software_dir, $network_dir)
-foreach ($dir in $dirs) {
-    if (-not (Test-Path $dir)) {
-        New-Item -Path $dir -ItemType Directory | Out-Null
+# === CONFIGURATION ===
+$BaseOutputDir = "C:\AuditOutput"
+
+# === PREPARE OUTPUT FOLDER ===
+$Timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+$OutputDir = Join-Path -Path $BaseOutputDir -ChildPath "Server_Audit_$Timestamp"
+New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
+
+Write-Host "Audit output will be saved to: $OutputDir"
+
+# === INSTALLED PROGRAMS ===
+Write-Host "Collecting Installed Programs..."
+$InstalledProgramsPath = "$OutputDir\Installed_Programs.txt"
+
+# 64-bit Programs
+Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* |
+    Select-Object DisplayName, DisplayVersion, Publisher, InstallDate |
+    Where-Object {$_.DisplayName} |
+    Sort-Object DisplayName |
+    Out-File $InstalledProgramsPath
+
+# 32-bit Programs
+Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
+    Select-Object DisplayName, DisplayVersion, Publisher, InstallDate |
+    Where-Object {$_.DisplayName} |
+    Sort-Object DisplayName |
+    Out-File -Append $InstalledProgramsPath
+
+# === RUNNING SERVICES ===
+Write-Host "Collecting Running Services..."
+$RunningServicesPath = "$OutputDir\Running_Services.txt"
+
+Get-Service | Where-Object {$_.Status -eq 'Running'} | 
+    Select-Object Name, DisplayName, Status, StartType |
+    Sort-Object Name |
+    Out-File $RunningServicesPath
+
+# === OPEN PORTS ===
+# Get TCP listeners and add Protocol label
+$tcp = Get-NetTCPConnection -State Listen | ForEach-Object {
+    [PSCustomObject]@{
+        Protocol      = 'TCP'
+        LocalAddress  = $_.LocalAddress
+        LocalPort     = $_.LocalPort
+        OwningProcess = $_.OwningProcess
     }
 }
 
-# 1. Computer
-Write-Output "[+] Collecting Computer Info..."
-Get-ComputerInfo | Out-File "$hardware_dir\ComputerInfo.txt"
+# Get UDP listeners and add Protocol label
+$udp = Get-NetUDPEndpoint | ForEach-Object {
+    [PSCustomObject]@{
+        Protocol      = 'UDP'
+        LocalAddress  = $_.LocalAddress
+        LocalPort     = $_.LocalPort
+        OwningProcess = $_.OwningProcess
+    }
+}
 
-# 2. CPU
-Write-Output "[+] Collecting CPU Info..."
-Get-CimInstance -ClassName Win32_Processor | Out-File "$hardware_dir\CPU.txt"
+# Combine and export
+$combinedPorts = $tcp + $udp
+$OpenPortsPath = "$OutputDir\OpenPorts.csv"
+$combinedPorts | Sort-Object Protocol, LocalPort | Export-Csv -Path $OpenPortsPath -NoTypeInformation
 
-# 3. Memory
-Write-Output "[+] Collecting Memory Info..."
-Get-CimInstance -ClassName Win32_PhysicalMemory | Out-File "$hardware_dir\Memory.txt"
+# === FIREWALL RULES ===
+Write-Host "Collecting Firewall Rules..."
+$FirewallRulesPath = "$OutputDir\Firewall_Rules.txt"
 
-# 4. Disk
-Write-Output "[+] Collecting Disk Info..."
-Get-CimInstance -ClassName Win32_DiskDrive | Out-File "$hardware_dir\Disk.txt"
-
-# 5. Installed programs (registry-based method, more reliable)
-Get-ItemProperty "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*", 
-                 "HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*" |
-    Select-Object DisplayName, DisplayVersion | Format-Table -AutoSize | Out-File "$software_dir\InstalledPrograms.txt"
-
-# 6. Startup programs for current user and system wide
-Write-Output "[+] Collecting Startup Program Info..."
-Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" | Out-File "$software_dir\StartupPrograms.txt"
-Get-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" | Out-File "$software_dir\StartupPrograms.txt" -Append
-
-# 7. Antivirus n Firewall
-Write-Output "[+] Collecting Security Info..."
-Get-CimInstance -Namespace "root/SecurityCenter2" -ClassName AntivirusProduct | Out-File "$software_dir\SecuritySoftware.txt"
 Get-NetFirewallRule | 
     Select-Object DisplayName, Direction, Action, Enabled, Profile |
-    Sort-Object DisplayName | Out-File "$software_dir\SecuritySoftware.txt" -Append
+    Sort-Object DisplayName |
+    Out-File $FirewallRulesPath
 
-# 8. Network
-Write-Output "[+] Collecting Network Info..."
-Get-CimInstance -ClassName Win32_NetworkAdapterConfiguration | Out-File "$network_dir\Network.txt"
+# === COMBINE INTO ONE REPORT ===
+Write-Host "Combining all reports into Server_Audit_Report.txt..."
+$CombinedFile = "$OutputDir\Server_Audit_Report.txt"
 
-# 9. IP configuration
-Write-Output "[+] Collecting IP Configuration..."
-Get-NetIPConfiguration | Out-File "$network_dir\IPConfiguration.txt"
+Add-Content $CombinedFile "===== INSTALLED PROGRAMS =====`n`n"
+Get-Content $InstalledProgramsPath | Add-Content $CombinedFile
 
-# 10. Network connections
-Write-Output "[+] Collecting Active TCP/UDP Connections..."
-netstat -ano | Out-File "$network_dir\ActiveConnections.txt"
+Add-Content $CombinedFile "`n`n===== RUNNING SERVICES =====`n`n"
+Get-Content $RunningServicesPath | Add-Content $CombinedFile
 
-# 11. Shared folders
-Write-Output "[+] Collecting Local Shared Folders..."
-Get-SmbShare | Out-File "$network_dir\SharedFolders.txt"
+Add-Content $CombinedFile "`n`n===== OPEN PORTS =====`n`n"
+Get-Content $OpenPortsPath | Add-Content $CombinedFile
 
-Write-Output "Inventory complete. Output saved to: $output_root"
+Add-Content $CombinedFile "`n`n===== FIREWALL RULES =====`n`n"
+Get-Content $FirewallRulesPath | Add-Content $CombinedFile
+
+# === DONE ===
+Write-Host "Audit completed. All reports saved in $OutputDir"
