@@ -2,7 +2,7 @@
 
 ## Description
 
-This PowerShell script generates a report on Installed Programs, Running Services, Open Ports, and Firewall Rules for a Windows machine
+This PowerShell script generates a report on Installed Programs, Running Services, Open Ports, Firewall Rules, and Chrome Bookmarks for a Windows machine
 
 ## Usage
 
