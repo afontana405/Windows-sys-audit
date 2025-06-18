@@ -74,6 +74,60 @@ Get-NetFirewallRule |
     Sort-Object DisplayName |
     Out-File $FirewallRulesPath
 
+# === Chrome Bookmarks ===
+Write-Host "Collecting Chrome Bookmarks"
+# Path to Chrome Bookmarks JSON file
+$BookmarksPath = "$env:LOCALAPPDATA\Google\Chrome\User Data\Default\Bookmarks"
+
+# Read JSON file
+$Bookmarks = Get-Content -Raw -Path $BookmarksPath | ConvertFrom-Json
+
+# Recursive function with Folder Path
+function Get-Bookmarks ($Nodes, $CurrentPath) {
+    $Results = @()
+
+    foreach ($Node in $Nodes) {
+        if ($Node.type -eq 'url') {
+            $Results += [PSCustomObject]@{
+                FolderPath = $CurrentPath
+                Name       = $Node.name
+                URL        = $Node.url
+            }
+        }
+        elseif ($Node.type -eq 'folder' -and $Node.children) {
+            # Recurse into subfolder
+            $SubPath = if ($CurrentPath) { "$CurrentPath\$($Node.name)" } else { $Node.name }
+            $Results += Get-Bookmarks $Node.children $SubPath
+        }
+    }
+
+    return $Results
+}
+
+# Now handle each root that exists
+$Roots = @(
+    @{ Name = 'Bookmark Bar'; Node = $Bookmarks.roots.bookmark_bar },
+    @{ Name = 'Other Bookmarks'; Node = $Bookmarks.roots.other },
+    @{ Name = 'Synced'; Node = $Bookmarks.roots.synced }
+)
+
+$AllBookmarks = @()
+
+foreach ($Root in $Roots) {
+    if ($Root.Node -and $Root.Node.children) {
+        $RootPath = $Root.Name
+        $AllBookmarks += Get-Bookmarks $Root.Node.children $RootPath
+    }
+}
+
+# Export result to CSV (preserving order — no Sort-Object!)
+$ChromeBookmarksPath = "$OutputDir\Chrome_Bookmarks.csv"
+if ($AllBookmarks.Count -gt 0) {
+    $AllBookmarks | Export-Csv -Path $ChromeBookmarksPath -NoTypeInformation
+} else {
+    Write-Host "No bookmarks found to export. (You may only have folders)"
+}
+
 # === COMBINE INTO ONE REPORT ===
 Write-Host "Combining all reports into Server_Audit_Report.txt..."
 $CombinedFile = "$OutputDir\Server_Audit_Report.txt"
@@ -89,6 +143,9 @@ Get-Content $OpenPortsPath | Add-Content $CombinedFile
 
 Add-Content $CombinedFile "`n`n===== FIREWALL RULES =====`n`n"
 Get-Content $FirewallRulesPath | Add-Content $CombinedFile
+
+Add-Content $CombinedFile "`n`n===== Chrome Bookmarks =====`n`n"
+Get-Content $ChromeBookmarksPath | Add-Content $CombinedFile
 
 # === DONE ===
 Write-Host "Audit completed. All reports saved in $OutputDir"
