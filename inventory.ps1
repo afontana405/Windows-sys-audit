@@ -6,7 +6,7 @@
 $BaseOutputDir = "C:\AuditOutput"
 
 # === PREPARE OUTPUT FOLDER ===
-$Timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+$Timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
 $OutputDir = Join-Path -Path $BaseOutputDir -ChildPath "Server_Audit_$Timestamp"
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 
