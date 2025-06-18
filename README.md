@@ -10,10 +10,10 @@ This PowerShell script generates a report on Installed Programs, Running Service
    `cd Windows-sys-audit`
 
 2. **Run the script**:  
-   `./inventory.sh`
+   `.\inventory.sh`
 
 3. **View the results**:  
-   The output of the system audit will be saved in within `C:/AuditOutput`.
+   The output of the system audit will be saved in within `C:\AuditOutput`.
 
 ## License 
 
